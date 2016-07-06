@@ -15,7 +15,7 @@
 @implementation TrainsitionAnimate
 
 - (instancetype)init{
-    return [self initWithAnimateType:animate_push andDuration:1.5f];
+    return [self initWithAnimateType:animate_push andDuration:0.5f];
 }
 
 - (instancetype)initWithAnimateType:(Animate_Type)type andDuration:(CGFloat)duration{
@@ -45,10 +45,11 @@
     //起始位置
     CGRect originFrame = [fromVC.targetView convertRect:fromVC.targetView.bounds toView:fromVC.view];
     UIView *snapshotView = [self customSnapshoFromView:fromVC.targetView];
+    //UIView *snapshotView = [fromVC.targetView snapshotViewAfterScreenUpdates: NO];
     snapshotView.frame   = originFrame;
     
     //结束位置
-    CGRect  finishFrame = [toVC.targetView convertRect:toVC.targetView.frame toView:toVC.view];
+    CGRect  finishFrame = [toVC.targetView convertRect:toVC.targetView.bounds toView:toVC.view];
     
     CGFloat height = CGRectGetMidY(finishFrame);
     toVC.targetHeight = height;
@@ -56,9 +57,9 @@
     UIView *backgrayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT)];
     backgrayView.backgroundColor = [UIColor lightGrayColor];
     
-    UIView *whitebackView = [[UIView alloc] initWithFrame:CGRectMake(0, height, k_SCREEN_WIDTH, k_SCREEN_HIGHT-height)];
-    //    whitebackView.backgroundColor = [UIColor whiteColor];
-    whitebackView.backgroundColor = [UIColor brownColor];
+    UIView *whitebackView = [[UIView alloc] initWithFrame:CGRectMake(0, height, k_SCREEN_HIGHT, k_SCREEN_HIGHT-height)];
+    whitebackView.backgroundColor = [UIColor whiteColor];
+
     
     //注意add 顺序
     toVC.view.frame = [transitionContext finalFrameForViewController:toVC];
@@ -69,22 +70,22 @@
     [containView addSubview:snapshotView];
     
     
-    [UIView animateWithDuration:_duration/3  animations:^{
+    [UIView animateWithDuration:_duration  animations:^{
         snapshotView.frame = finishFrame;
         snapshotView.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
     } completion:^(BOOL finished) {
         if (finished) {
-            [UIView animateWithDuration:_duration/3  animations:^{
+            [UIView animateWithDuration:_duration  animations:^{
                 snapshotView.transform = CGAffineTransformIdentity;
             } completion:^(BOOL finished) {
                 if (finished) {
-                    [UIView animateWithDuration:_duration/3 animations:^{
-                        snapshotView.alpha = 0.f;
+                    [UIView animateWithDuration:_duration animations:^{
+                        snapshotView.alpha = 0.0f;
                     } completion:^(BOOL finished) {
                         if(finished){
                             [backgrayView removeFromSuperview];
                             [snapshotView removeFromSuperview];
-                            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+                            [transitionContext completeTransition:YES];
                         }
                     }];
                     [self addPathAnimateWithView:backgrayView fromPoint:snapshotView.center];
@@ -126,7 +127,7 @@
     
     [self addPathAnimateWithView:backgrayView fromPoint:snapshotView.center];
     
-    [UIView animateWithDuration:_duration/3 delay:_duration/3 options:UIViewAnimationOptionTransitionNone animations:^{
+    [UIView animateWithDuration:_duration delay:_duration options:UIViewAnimationOptionTransitionNone animations:^{
         snapshotView.frame = finishFrame;
         snapshotView.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
     } completion:^(BOOL finished) {
@@ -147,23 +148,22 @@
 }
 
 #pragma mark -- 收合动画(CAShapeLayer + UIBezierPath)
-
 - (void)addPathAnimateWithView:(UIView *)toView fromPoint:(CGPoint)point{
 
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT)];
-    [path appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:0.1 startAngle:0 endAngle:2*M_PI clockwise:NO]];
+    UIBezierPath *path1 = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT)];
+    [path1 appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:0.1 startAngle:0 endAngle:2*M_PI clockwise:NO]];
     
-    CGFloat radius = point.y > 0 ? k_SCREEN_WIDTH*3/4 : k_SCREEN_HIGHT*3/4-point.y;
+    CGFloat radius = point.y > 0 ? k_SCREEN_WIDTH * 3/4 : k_SCREEN_HIGHT * 3 / 4 - point.y;
     UIBezierPath *path2 = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT)];
-    [path2 appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:2*M_PI clockwise:NO]];
+    [path2 appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:radius startAngle:0 endAngle:2 * M_PI clockwise:NO]];
     
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     toView.layer.mask = shapeLayer;
     
     CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
-    pathAnimation.fromValue = _type == animate_push? (__bridge id)path.CGPath:(__bridge id)path2.CGPath;
-    pathAnimation.toValue   = _type == animate_push? (__bridge id)path2.CGPath:(__bridge id)path.CGPath;
-    pathAnimation.duration  = _duration/3;
+    pathAnimation.fromValue   = _type == animate_push ? (__bridge id)path1.CGPath:(__bridge id)path2.CGPath;
+    pathAnimation.toValue     = _type == animate_push ? (__bridge id)path2.CGPath:(__bridge id)path1.CGPath;
+    pathAnimation.duration    = _duration;
     pathAnimation.repeatCount = 1;
     pathAnimation.removedOnCompletion = NO;
     pathAnimation.fillMode = kCAFillModeForwards;
@@ -171,16 +171,14 @@
     [shapeLayer addAnimation:pathAnimation forKey:@"pathAnimate"];
 }
 
-//产生targetView镜像
+//产生视图镜像
 - (UIView *)customSnapshoFromView:(UIView *)inputView {
     
-    // Make an image from the input view.
     UIGraphicsBeginImageContextWithOptions(inputView.bounds.size, NO, 0);
     [inputView.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    // Create an image view.
     UIView *snapshot = [[UIImageView alloc] initWithImage:image];
     snapshot.layer.masksToBounds = NO;
     snapshot.layer.cornerRadius = 0.0;

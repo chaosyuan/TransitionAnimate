@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "540E51CD1E4753D71C067178F0DB1EC1425BEA2D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "540E51CD1E4753D71C067178F0DB1EC1425BEA2D" : 0,
+    "C7925AB5B99930D87B1AFAD3E5820BE26818E6FF" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "9BABFF9D-478B-42CA-BA76-1BEF53617ECE",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "540E51CD1E4753D71C067178F0DB1EC1425BEA2D" : "TransitionAnimate\/",
+    "C7925AB5B99930D87B1AFAD3E5820BE26818E6FF" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Transition_Form",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Transition_Form\/Transition_Form.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/chaosyuan\/TransitionAnimate.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "540E51CD1E4753D71C067178F0DB1EC1425BEA2D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/chaosyuan\/ScanQRCode.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C7925AB5B99930D87B1AFAD3E5820BE26818E6FF"
+    }
+  ]
+}

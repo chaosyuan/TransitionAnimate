@@ -20,7 +20,7 @@
 @property (nonatomic,strong) UIView *targetView;
 @property (nonatomic,strong) TrainsitionAnimate   *animate;
 @property (nonatomic,strong) UITableView *tableView;
-@property (nonatomic,strong) UIView *headView;
+@property (nonatomic,strong) UIView      *headView;
 
 @end
 
@@ -28,31 +28,32 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = @"SecondVc";
 
-    self.animate = [[TrainsitionAnimate alloc] initWithAnimateType:animate_pop andDuration:1.5f];
-    [self.view addSubview:self.targetView];
+    self.animate = [[TrainsitionAnimate alloc] initWithAnimateType:animate_pop andDuration:0.5f];
+    [self.view addSubview:self.tableView];
     
     [self initUI];
 }
 
 
 - (void)initUI{
-    self.view.backgroundColor = [UIColor whiteColor];
     
-    UIImageView *back = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT/2-64)];
-    back.contentMode = UIViewContentModeScaleToFill;
-    back.backgroundColor = [UIColor lightGrayColor];
-    back.image = [UIImage imageNamed:@"page.jpg"];
+    self.view.backgroundColor  = [UIColor whiteColor];
+    UIImageView *backImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT/2-64)];
+    backImageView.contentMode     = UIViewContentModeScaleToFill;
+    backImageView.backgroundColor = [UIColor lightGrayColor];
+    backImageView.image = [UIImage imageNamed:@"background"];
     
+    UIView *imageView = [[UIView alloc] initWithFrame:CGRectMake(20, k_SCREEN_HIGHT/2 - 64 - 70, k_SCREEN_WIDTH/3-20, (k_SCREEN_WIDTH / 3 - 20)*1.3)];
+    imageView.backgroundColor = self.select_color;
+    self.targetView = imageView;
     
-    UIView *image = [[UIView alloc] initWithFrame:CGRectMake(20, k_SCREEN_HIGHT/2 - 64 - 70, k_SCREEN_WIDTH/3-20, (k_SCREEN_WIDTH/3 - 20)*1.3)];
-    image.backgroundColor = self.select_color;
-    self.targetView = image;
-    
-    _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT-200)];
-    _headView.backgroundColor = [UIColor purpleColor];
-    [_headView addSubview:back];
-    [_headView addSubview:image];
+    _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT - 300)];
+    _headView.backgroundColor = [UIColor whiteColor];
+    [_headView addSubview:backImageView];
+    [_headView addSubview:imageView];
     
     
     self.tableView.tableHeaderView = _headView;
@@ -69,7 +70,7 @@
     self.navigationController.delegate = self;
 }
 
-- (id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+- (nullable  id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
                                    animationControllerForOperation:(UINavigationControllerOperation)operation
                                                 fromViewController:(UIViewController *)fromVC
                                                   toViewController:(UIViewController *)toVC{
@@ -89,7 +90,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    static NSString  *identId = @"Cell";
+    static NSString  *identId = @"CellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identId];
     
     if (!cell) {

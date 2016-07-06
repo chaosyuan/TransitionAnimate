@@ -17,7 +17,6 @@
 		778AFE821D2B9559008113C1 /* TrainsitionAnimate.m in Sources */ = {isa = PBXBuildFile; fileRef = 778AFE811D2B9559008113C1 /* TrainsitionAnimate.m */; };
 		778AFE851D2BE6BB008113C1 /* CollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 778AFE841D2BE6BB008113C1 /* CollectionCell.m */; };
 		778AFE881D2BE85D008113C1 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 778AFE871D2BE85D008113C1 /* SecondViewController.m */; };
-		778AFE8B1D2BEC84008113C1 /* page.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 778AFE8A1D2BEC84008113C1 /* page.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +38,6 @@
 		778AFE841D2BE6BB008113C1 /* CollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionCell.m; sourceTree = "<group>"; };
 		778AFE861D2BE85D008113C1 /* SecondViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecondViewController.h; sourceTree = "<group>"; };
 		778AFE871D2BE85D008113C1 /* SecondViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
-		778AFE8A1D2BEC84008113C1 /* page.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = page.jpg; path = ../page.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,7 +101,6 @@
 			children = (
 				778AFE7A1D2B90CF008113C1 /* UIViewController+TrainsitionExtension.h */,
 				778AFE7B1D2B90CF008113C1 /* UIViewController+TrainsitionExtension.m */,
-				778AFE8A1D2BEC84008113C1 /* page.jpg */,
 				778AFE801D2B9559008113C1 /* TrainsitionAnimate.h */,
 				778AFE811D2B9559008113C1 /* TrainsitionAnimate.m */,
 			);
@@ -167,7 +164,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				778AFE8B1D2BEC84008113C1 /* page.jpg in Resources */,
 				778A1F0D1D2A5F02007BAA37 /* LaunchScreen.storyboard in Resources */,
 				778A1F0A1D2A5F02007BAA37 /* Assets.xcassets in Resources */,
 				778A1F081D2A5F02007BAA37 /* Main.storyboard in Resources */,
