@@ -31,6 +31,7 @@
     self.title = @"FirstVc";
     self.animate = [[TrainsitionAnimate alloc] init];
     [self.view addSubview:self.collectionView];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -81,7 +82,7 @@
     return _collectionView;
 }
 
-- (id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+- (nullable id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
                                    animationControllerForOperation:(UINavigationControllerOperation)operation
                                                 fromViewController:(UIViewController *)fromVC
                                                   toViewController:(UIViewController *)toVC{

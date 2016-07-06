@@ -93,12 +93,9 @@
                     }];
                     [self addPathAnimateWithView:backgrayView fromPoint:snapshotView.center];
                 }
-                
             }];
         }
     }];
-    
-    
 }
 - (void)popAnimateWithAnimateTransition:(id<UIViewControllerContextTransitioning>)transitionContext{
     
@@ -112,7 +109,6 @@
     snapshotView.frame   = originFrame;
     
     CGRect finishFrame   = [toVC.targetView convertRect:toVC.targetView.bounds toView:toVC.view];
-    
     UIView *backgrayView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT)];
     backgrayView.backgroundColor  = [UIColor lightGrayColor];
     
@@ -146,7 +142,6 @@
             }];
         }
     }];
-    
 }
 
 #pragma mark -- 收合动画(CAShapeLayer + UIBezierPath)
