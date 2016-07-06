@@ -37,15 +37,17 @@
 
 - (void)pushAnimateWithAnimateTransition:(id <UIViewControllerContextTransitioning>)transitionContext{
     
+    ////获取参与转场的视图控制器
     UIViewController *fromVC = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     UIViewController *toVC   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     
+    ///获取转场发生的容器
     UIView *containView = [transitionContext containerView];
     
     //起始位置
     CGRect originFrame = [fromVC.targetView convertRect:fromVC.targetView.bounds toView:fromVC.view];
-    UIView *snapshotView = [self customSnapshoFromView:fromVC.targetView];
-    //UIView *snapshotView = [fromVC.targetView snapshotViewAfterScreenUpdates: NO];
+    //产生视图镜像
+    UIView *snapshotView = [fromVC.targetView snapshotViewAfterScreenUpdates: NO];
     snapshotView.frame   = originFrame;
     
     //结束位置
@@ -60,14 +62,15 @@
     UIView *whitebackView = [[UIView alloc] initWithFrame:CGRectMake(0, height, k_SCREEN_HIGHT, k_SCREEN_HIGHT-height)];
     whitebackView.backgroundColor = [UIColor whiteColor];
 
+    //使用initialFrameForViewController 和 finalFrameForViewController 获取过渡开始和结束时每个ViewController的frame
+    toVC.view.frame = [transitionContext finalFrameForViewController:toVC];
     
     //注意add 顺序
-    toVC.view.frame = [transitionContext finalFrameForViewController:toVC];
     [containView addSubview:toVC.view];
     [containView addSubview:backgrayView];
     
     [backgrayView addSubview:whitebackView];
-    [containView addSubview:snapshotView];
+    [containView  addSubview:snapshotView];
     
     
     [UIView animateWithDuration:_duration  animations:^{
@@ -85,7 +88,7 @@
                         if(finished){
                             [backgrayView removeFromSuperview];
                             [snapshotView removeFromSuperview];
-                            [transitionContext completeTransition:YES];
+                            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
                         }
                     }];
                     [self addPathAnimateWithView:backgrayView fromPoint:snapshotView.center];
@@ -103,9 +106,9 @@
     UIViewController *toVC   = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     
     UIView *containView = [transitionContext containerView];
-    CGRect originFrame = [fromVC.targetView convertRect:fromVC.targetView.bounds toView:fromVC.view];
+    CGRect originFrame  = [fromVC.targetView convertRect:fromVC.targetView.bounds toView:fromVC.view];
     
-    UIView *snapshotView = [self customSnapshoFromView:fromVC.targetView];
+    UIView *snapshotView = [fromVC.targetView snapshotViewAfterScreenUpdates: NO];
     snapshotView.frame   = originFrame;
     
     CGRect finishFrame   = [toVC.targetView convertRect:toVC.targetView.bounds toView:toVC.view];
@@ -116,14 +119,13 @@
     UIView *backWhiteView = [[UIView alloc] initWithFrame:CGRectMake(0, fromVC.targetHeight, k_SCREEN_WIDTH, k_SCREEN_HIGHT-fromVC.targetHeight)];
     backWhiteView.backgroundColor = [UIColor whiteColor];
     
-    
     toVC.view.frame = [transitionContext finalFrameForViewController:toVC];
     
-    [containView addSubview:toVC.view];
-    [containView addSubview:fromVC.view];
-    [containView addSubview:backgrayView];
+    [containView  addSubview:toVC.view];
+    [containView  addSubview:fromVC.view];
+    [containView  addSubview:backgrayView];
     [backgrayView addSubview:backWhiteView];
-    [containView addSubview:snapshotView];
+    [containView  addSubview:snapshotView];
     
     [self addPathAnimateWithView:backgrayView fromPoint:snapshotView.center];
     
@@ -151,7 +153,7 @@
 - (void)addPathAnimateWithView:(UIView *)toView fromPoint:(CGPoint)point{
 
     UIBezierPath *path1 = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT)];
-    [path1 appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:0.1 startAngle:0 endAngle:2*M_PI clockwise:NO]];
+    [path1 appendPath:[UIBezierPath bezierPathWithArcCenter:point radius:0.1 startAngle:0 endAngle:2 * M_PI clockwise:NO]];
     
     CGFloat radius = point.y > 0 ? k_SCREEN_WIDTH * 3/4 : k_SCREEN_HIGHT * 3 / 4 - point.y;
     UIBezierPath *path2 = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, k_SCREEN_WIDTH, k_SCREEN_HIGHT)];
@@ -165,28 +167,10 @@
     pathAnimation.toValue     = _type == animate_push ? (__bridge id)path2.CGPath:(__bridge id)path1.CGPath;
     pathAnimation.duration    = _duration;
     pathAnimation.repeatCount = 1;
+    pathAnimation.fillMode            = kCAFillModeForwards;
     pathAnimation.removedOnCompletion = NO;
-    pathAnimation.fillMode = kCAFillModeForwards;
-    pathAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+    pathAnimation.timingFunction      = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
     [shapeLayer addAnimation:pathAnimation forKey:@"pathAnimate"];
-}
-
-//产生视图镜像
-- (UIView *)customSnapshoFromView:(UIView *)inputView {
-    
-    UIGraphicsBeginImageContextWithOptions(inputView.bounds.size, NO, 0);
-    [inputView.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    UIView *snapshot = [[UIImageView alloc] initWithImage:image];
-    snapshot.layer.masksToBounds = NO;
-    snapshot.layer.cornerRadius = 0.0;
-    snapshot.layer.shadowOffset = CGSizeMake(0.0, 0.0);
-    snapshot.layer.shadowRadius = 5.0;
-    snapshot.layer.shadowOpacity = 0.4;
-    
-    return snapshot;
 }
 
 @end
