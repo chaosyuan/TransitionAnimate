@@ -36,6 +36,7 @@ UIViewControllerAnimatedTransitioning {
         
         guard
             let presentedController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey),
+            //Modal 转场中 获取的是presentedView返回的视图
             let presentedControllerView = transitionContext.viewForKey(UITransitionContextToViewKey),
             let containerView = transitionContext.containerView()
             else {

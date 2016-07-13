@@ -47,6 +47,7 @@ class presentingViewController: UIViewController, UIViewControllerTransitioningD
         return nil
     }
     
+    // 返回控制控制器弹出动画的对象
     func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         if presented == self {
@@ -56,7 +57,7 @@ class presentingViewController: UIViewController, UIViewControllerTransitioningD
             return nil
         }
     }
-    
+    // 返回控制控制器消失动画的对象
     func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         if dismissed == self {
