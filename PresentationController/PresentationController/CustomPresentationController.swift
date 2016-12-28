@@ -21,7 +21,7 @@ class CustomPresentationController: UIPresentationController {
         
         guard
             let containerView = containerView,
-            let presentedView = presentedView()
+            let presentedView = presentedView
             else {
                 return
         }
@@ -30,34 +30,34 @@ class CustomPresentationController: UIPresentationController {
         containerView.addSubview(dimmingView)
         containerView.addSubview(presentedView)
         
-        if let transitionCoordinator = self.presentingViewController.transitionCoordinator() {
-            transitionCoordinator.animateAlongsideTransition({(context: UIViewControllerTransitionCoordinatorContext!) -> Void in
+        if let transitionCoordinator = self.presentingViewController.transitionCoordinator {
+            transitionCoordinator.animate(alongsideTransition: {(context: UIViewControllerTransitionCoordinatorContext!) -> Void in
                 self.dimmingView.alpha = 1.0
                 }, completion:nil)
         }
     }
     
-    override func presentationTransitionDidEnd(completed: Bool)  {
+    override func presentationTransitionDidEnd(_ completed: Bool)  {
         if !completed {
             self.dimmingView.removeFromSuperview()
         }
     }
     
     override func dismissalTransitionWillBegin()  {
-        if let transitionCoordinator = self.presentingViewController.transitionCoordinator() {
-            transitionCoordinator.animateAlongsideTransition({(context: UIViewControllerTransitionCoordinatorContext!) -> Void in
+        if let transitionCoordinator = self.presentingViewController.transitionCoordinator {
+            transitionCoordinator.animate(alongsideTransition: {(context: UIViewControllerTransitionCoordinatorContext!) -> Void in
                 self.dimmingView.alpha  = 0.0
                 }, completion:nil)
         }
     }
     
-    override func dismissalTransitionDidEnd(completed: Bool) {
+    override func dismissalTransitionDidEnd(_ completed: Bool) {
         if completed {
             self.dimmingView.removeFromSuperview()
         }
     }
     
-    override func frameOfPresentedViewInContainerView() -> CGRect {
+    override var frameOfPresentedViewInContainerView : CGRect {
         guard
             let containerView = containerView
             else {
@@ -65,19 +65,19 @@ class CustomPresentationController: UIPresentationController {
         }
         
         var frame = containerView.bounds;
-        frame = CGRectInset(frame, 50.0, 50.0)
+        frame = frame.insetBy(dx: 50.0, dy: 50.0)
         return frame
     }
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator transitionCoordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: transitionCoordinator)
+    override func viewWillTransition(to size: CGSize, with transitionCoordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: transitionCoordinator)
         
         guard
             let containerView = containerView
             else {
                 return
         }
-        transitionCoordinator.animateAlongsideTransition({(context: UIViewControllerTransitionCoordinatorContext!) -> Void in
+        transitionCoordinator.animate(alongsideTransition: {(context: UIViewControllerTransitionCoordinatorContext!) -> Void in
             self.dimmingView.frame = containerView.bounds
             }, completion:nil)
     }

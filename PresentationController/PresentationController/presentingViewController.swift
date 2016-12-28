@@ -11,8 +11,8 @@ import UIKit
 class presentingViewController: UIViewController, UIViewControllerTransitioningDelegate{
 
     
-    @IBAction func dismiss(segue: UIStoryboardSegue) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func dismiss(_ segue: UIStoryboardSegue) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -20,14 +20,14 @@ class presentingViewController: UIViewController, UIViewControllerTransitioningD
         self.commonInit()
     }
     
-    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!)  {
+    override init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: Bundle!)  {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         self.commonInit()
     }
     
     func commonInit() {
-        self.modalPresentationStyle = .Custom
+        self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
     }
     
@@ -38,17 +38,17 @@ class presentingViewController: UIViewController, UIViewControllerTransitioningD
     }
     
     
-    func presentationControllerForPresentedViewController(presented: UIViewController, presentingViewController presenting: UIViewController, sourceViewController source: UIViewController) -> UIPresentationController? {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         
         if presented == self {
-            return CustomPresentationController(presentedViewController: presented, presentingViewController: presenting)
+            return CustomPresentationController(presentedViewController: presented, presenting: presenting)
         }
         
         return nil
     }
     
     // 返回控制控制器弹出动画的对象
-    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         if presented == self {
             return CustomPresentationAnimation(isPresenting: true)
@@ -58,7 +58,7 @@ class presentingViewController: UIViewController, UIViewControllerTransitioningD
         }
     }
     // 返回控制控制器消失动画的对象
-    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         
         if dismissed == self {
             return CustomPresentationAnimation(isPresenting: false)

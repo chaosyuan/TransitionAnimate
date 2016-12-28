@@ -12,18 +12,18 @@ class CustomPresentationAnimation: NSObject,
 UIViewControllerAnimatedTransitioning {
 
     let isPresenting :Bool
-    let duration :NSTimeInterval = 0.5
+    let duration :TimeInterval = 0.5
     
     init(isPresenting: Bool) {
         self.isPresenting = isPresenting
         super.init()
     }
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return self.duration
     }
     
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning)  {
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning)  {
         if isPresenting {
             animatePresentationWithTransitionContext(transitionContext)
         }
@@ -32,39 +32,39 @@ UIViewControllerAnimatedTransitioning {
         }
     }
     
-    func animatePresentationWithTransitionContext(transitionContext: UIViewControllerContextTransitioning) {
+    func animatePresentationWithTransitionContext(_ transitionContext: UIViewControllerContextTransitioning?) {
         
         guard
-            let presentedController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey),
+            let presentedController = transitionContext?.viewController(forKey: UITransitionContextViewControllerKey.to),
             //Modal 转场中 获取的是presentedView返回的视图
-            let presentedControllerView = transitionContext.viewForKey(UITransitionContextToViewKey),
-            let containerView = transitionContext.containerView()
+             let presentedControllerView = transitionContext?.view(forKey: UITransitionContextViewKey.to),
+             let containerView =  transitionContext?.containerView
             else {
                 return
         }
-        presentedControllerView.frame = transitionContext.finalFrameForViewController(presentedController)
+        presentedControllerView.frame = (transitionContext?.finalFrame(for: presentedController))!
         presentedControllerView.center.y -= containerView.bounds.size.height
         containerView.addSubview(presentedControllerView)
         
-        UIView.animateWithDuration(self.duration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .AllowUserInteraction, animations: {
+        UIView.animate(withDuration: self.duration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .allowUserInteraction, animations: {
             presentedControllerView.center.y += containerView.bounds.size.height
             }, completion: {(completed: Bool) -> Void in
-                transitionContext.completeTransition(completed)
+                transitionContext?.completeTransition(completed)
         })
     }
     
-    func animateDismissalWithTransitionContext(transitionContext: UIViewControllerContextTransitioning) {
+    func animateDismissalWithTransitionContext(_ transitionContext: UIViewControllerContextTransitioning?) {
         
         guard
-            let presentedControllerView = transitionContext.viewForKey(UITransitionContextFromViewKey),
-            let containerView = transitionContext.containerView()
+            let presentedControllerView = transitionContext?.view(forKey: UITransitionContextViewKey.from),
+            let containerView = transitionContext?.containerView
             else {
                 return
         }
-        UIView.animateWithDuration(self.duration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .AllowUserInteraction, animations: {
+        UIView.animate(withDuration: self.duration, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .allowUserInteraction, animations: {
             presentedControllerView.center.y += containerView.bounds.size.height
             }, completion: {(completed: Bool) -> Void in
-                transitionContext.completeTransition(completed)
+                transitionContext?.completeTransition(completed)
         })
     }
 }
